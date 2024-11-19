@@ -1,14 +1,15 @@
 services:
   db:
-    image: postgres:13
+    image: mysql:8
     ports:
-      - "5432:5432"
+      - "3306:3306"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ranking
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ranking
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - mysqldata:/var/lib/mysql
 
 volumes:
-  pgdata:
+  mysqldata:
