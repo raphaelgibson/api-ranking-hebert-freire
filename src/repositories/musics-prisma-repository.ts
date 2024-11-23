@@ -11,7 +11,16 @@ export class MusicsPrismaRepository {
   }
 
   async getMusics() {
-    const musics = await prismaClient.music.findMany()
+    const musics = await prismaClient.music.findMany({
+      orderBy: [
+        {
+          votes: 'desc'
+        },
+        {
+          name: 'asc'
+        }
+      ]
+    })
     return musics
   }
 

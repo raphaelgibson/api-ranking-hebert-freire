@@ -11,7 +11,16 @@ export class PraisesPrismaRepository {
   }
 
   async getPraises() {
-    const praises = await prismaClient.praise.findMany()
+    const praises = await prismaClient.praise.findMany({
+      orderBy: [
+        {
+          votes: 'desc'
+        },
+        {
+          name: 'asc'
+        }
+      ]
+    })
     return praises
   }
 
