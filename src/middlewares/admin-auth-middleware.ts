@@ -5,7 +5,14 @@ import { prismaClient } from '../repositories/prisma-client'
 export async function adminAuthMiddleware(req: FastifyRequest, res: FastifyReply, done: () => void) {
   const accessToken = req.headers['x-access-token'] as string
   const secretKey = process.env.SECRET_KEY || ''
-  const tokenDecoded = jwt.verify(accessToken, secretKey) as { accountId: string }
+  let tokenDecoded: { accountId: string }
+
+  try {
+    tokenDecoded = jwt.verify(accessToken, secretKey) as { accountId: string }
+  } catch (error) {
+    console.error(error)
+    return res.status(401).send({ error: 'Unauthorized' })
+  }
 
   const user = await prismaClient.user.findUnique({
     where: {
