@@ -20,7 +20,7 @@ export class AuthController {
       return res.status(401).send({ error: 'Unauthorized' })
     }
 
-    const passwordIsValid = verifyPassword(password, user.password)
+    const passwordIsValid = await verifyPassword(password, user.password)
 
     if (!passwordIsValid) {
       return res.status(401).send({ error: 'Unauthorized' })
