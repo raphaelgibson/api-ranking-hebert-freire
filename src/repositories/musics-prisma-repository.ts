@@ -1,5 +1,11 @@
 import { prismaClient } from './prisma-client'
 
+type UpdateMusicData = {
+  musicId: string
+  name: string
+  singer?: string
+}
+
 export class MusicsPrismaRepository {
   async getMusicById(musicId: string) {
     const music = await prismaClient.music.findUnique({
@@ -35,6 +41,19 @@ export class MusicsPrismaRepository {
     return music
   }
 
+  async updateMusic(updateMusicData: UpdateMusicData) {
+    const { musicId, name, singer } = updateMusicData
+    await prismaClient.music.update({
+      data: {
+        name,
+        singer
+      },
+      where: {
+        id: musicId
+      }
+    })
+  }
+
   async updateMusicVotes(musicId: string, votes: number) {
     await prismaClient.music.update({
       data: {
@@ -42,6 +61,14 @@ export class MusicsPrismaRepository {
       },
       where: {
         id: musicId
+      }
+    })
+  }
+
+  async deleteMusic(id: string) {
+    await prismaClient.music.delete({
+      where: {
+        id
       }
     })
   }

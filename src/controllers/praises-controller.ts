@@ -21,6 +21,14 @@ export class PraisesController {
     return res.status(201).send(praise)
   }
 
+  async updatePraise(req: FastifyRequest, res: FastifyReply) {
+    const { praiseId } = req.params as { praiseId: string }
+    const { name, singer } = req.body as { name: string; singer?: string }
+    await this.praisesRepository.updatePraise({ praiseId, name, singer })
+
+    return res.status(204).send()
+  }
+
   async voteForPraise(req: FastifyRequest, res: FastifyReply) {
     const { praiseId } = req.params as { praiseId: string }
     const praise = await this.praisesRepository.getPraiseById(praiseId)
@@ -31,6 +39,13 @@ export class PraisesController {
 
     const praiseVotes = praise.votes + 1
     await this.praisesRepository.updatePraiseVotes(praiseId, praiseVotes)
+
+    return res.status(204).send()
+  }
+
+  async deletePraise(req: FastifyRequest, res: FastifyReply) {
+    const { praiseId } = req.params as { praiseId: string }
+    await this.praisesRepository.deletePraise(praiseId)
 
     return res.status(204).send()
   }

@@ -21,6 +21,14 @@ export class MusicsController {
     return res.status(201).send(music)
   }
 
+  async updateMusic(req: FastifyRequest, res: FastifyReply) {
+    const { musicId } = req.params as { musicId: string }
+    const { name, singer } = req.body as { name: string; singer?: string }
+    await this.musicsRepository.updateMusic({ musicId, name, singer })
+
+    return res.status(204).send()
+  }
+
   async voteForMusic(req: FastifyRequest, res: FastifyReply) {
     const { musicId } = req.params as { musicId: string }
     const music = await this.musicsRepository.getMusicById(musicId)
@@ -31,6 +39,13 @@ export class MusicsController {
 
     const musicVotes = music.votes + 1
     await this.musicsRepository.updateMusicVotes(musicId, musicVotes)
+
+    return res.status(204).send()
+  }
+
+  async deleteMusic(req: FastifyRequest, res: FastifyReply) {
+    const { musicId } = req.params as { musicId: string }
+    await this.musicsRepository.deleteMusic(musicId)
 
     return res.status(204).send()
   }

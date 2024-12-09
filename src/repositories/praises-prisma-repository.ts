@@ -1,5 +1,11 @@
 import { prismaClient } from './prisma-client'
 
+type UpdatePraiseData = {
+  praiseId: string
+  name: string
+  singer?: string
+}
+
 export class PraisesPrismaRepository {
   async getPraiseById(praiseId: string) {
     const praise = await prismaClient.praise.findUnique({
@@ -35,6 +41,19 @@ export class PraisesPrismaRepository {
     return praise
   }
 
+  async updatePraise(updatePraiseData: UpdatePraiseData) {
+    const { praiseId, name, singer } = updatePraiseData
+    await prismaClient.praise.update({
+      data: {
+        name,
+        singer
+      },
+      where: {
+        id: praiseId
+      }
+    })
+  }
+
   async updatePraiseVotes(praiseId: string, votes: number) {
     await prismaClient.praise.update({
       data: {
@@ -42,6 +61,14 @@ export class PraisesPrismaRepository {
       },
       where: {
         id: praiseId
+      }
+    })
+  }
+
+  async deletePraise(id: string) {
+    await prismaClient.praise.delete({
+      where: {
+        id
       }
     })
   }

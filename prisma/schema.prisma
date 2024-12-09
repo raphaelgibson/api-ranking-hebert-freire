@@ -28,3 +28,13 @@ model Praise {
 
   @@map("praises")
 }
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  admin    Boolean @default(false)
+
+  @@map("users")
+}
